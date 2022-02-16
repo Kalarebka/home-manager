@@ -48,11 +48,13 @@ class RegisterView(View):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user_profile = UserProfile.objects.get_or_create(user=user, likes=0, picture=request.FILES.picture)
+            # picture = request.FILES.picture
+            user_profile = UserProfile.objects.create(user=user, likes=0,)
             user_profile.save()
             return redirect(reverse('board:index'))
         else:
             print(form.errors)
+            return redirect(reverse('board:index'))
 
 
 
