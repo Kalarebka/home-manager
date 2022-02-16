@@ -1,0 +1,14 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Create an Account
+{% endblock %}
+
+{% block content_block %}
+<form method="POST", class="form-group">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+{% endblock %}

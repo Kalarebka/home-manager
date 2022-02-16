@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 class Task(models.Model):
