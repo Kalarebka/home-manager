@@ -12,7 +12,14 @@ from .forms import RegisterForm
 class IndexView(View):
     def get(self, request):
         context_dict = {}
+        profile = UserProfile.objects.get(user=request.user.id)
+        context_dict['profile'] = profile
         return render(request, "board/index.html", context=context_dict)
+
+
+class AboutView(View):
+    def get(self, request):
+        return render(request, "board/about.html")
 
 
 class ShowBoardView(View):
@@ -32,7 +39,9 @@ class CreateBoardView(View):
 
 
 class UserProfileView(View):
-    pass
+    def get(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        render(request, 'board/user_profile.html')
 
 
 class EditTaskView(View):
@@ -48,8 +57,8 @@ class RegisterView(View):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # picture = request.FILES.picture
-            user_profile = UserProfile.objects.create(user=user, likes=0,)
+            # If user does not have a board yet, the board_id is -1
+            user_profile = UserProfile.objects.create(user=user, likes=0, board_id=-1)
             user_profile.save()
             return redirect(reverse('board:index'))
         else:

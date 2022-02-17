@@ -16,6 +16,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='profile_images', blank=True, null=True)
     likes = models.IntegerField(default=0)
+    board_id = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.user.username
