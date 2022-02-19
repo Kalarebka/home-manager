@@ -31,19 +31,19 @@
   </head>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Home Manager</a>
+      <a class="navbar-brand" href="{% url 'board:index' %}">Home Manager</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item"><a class="nav-link" href="{url 'board:about'}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'board:about' %}">About</a></li>
           {% if user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'board:show_board'  user.board_id%}">Board</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'board:user_profile' user.id   %}">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'board:show_board' %}">Board</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'board:user_profile' user.id %}">Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
-          <li class="nav-item"><a class="nav-link" href="#">Register</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'board:register' %}">Register</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Board Demo</a></li>
           {% endif %}
@@ -58,8 +58,13 @@
   
   
       <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
-  
-        
+
+    <footer class="bg-dark text-center text-white">
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright: Ewelina Sitarczyk
+      </div>
+    </footer>
+
     </body>
 </html>
 

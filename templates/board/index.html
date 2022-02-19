@@ -7,4 +7,15 @@ Home Manager
 
 {% block content_block %}
 
+{% if user.is_authenticated %}
+<h1>Hello {{ user.username }}!</h1>
+    {% if board_id %}
+
+    {% else %}
+<p>nie ma tablicy</p>
+    {% endif %}
+{% else %}
+<h1>Welcome to Home Manager</h1>
+<p>Register to create or join a task management board or go to demo board to see the functionality.</p>
+{% endif %}
 {% endblock %}

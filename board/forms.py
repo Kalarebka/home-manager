@@ -12,7 +12,9 @@ class RegisterForm(UserCreationForm):
 
 
 class TaskForm(ModelForm):
-    pass
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'priority']
 
 
 class BoardForm(ModelForm):

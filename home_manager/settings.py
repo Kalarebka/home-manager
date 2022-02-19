@@ -133,9 +133,9 @@ REGISTRATION_AUTO_LOGIN = True
 
 # LOGIN
 # Redirection after logging in
-LOGIN_REDIRECT_URL = 'index/'
+LOGIN_REDIRECT_URL = '/'
 # Redirection if not logged in
-LOGIN_URL = 'login/'
+LOGIN_URL = '/accounts/login/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
