@@ -6,8 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .models import Board, Task, UserProfile
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm, TaskForm
+from .forms import RegisterForm, TaskForm, BoardForm
 from django.utils import timezone
+from collections import namedtuple
 
 
 class IndexView(View):
@@ -15,7 +16,7 @@ class IndexView(View):
         context_dict = {}
         if request.user.is_authenticated:
             user_profile = UserProfile.objects.get(user=request.user)
-            context_dict['board_id'] = user_profile.board_id
+            context_dict['board_id'] = user_profile.board
         return render(request, "board/index.html", context=context_dict)
 
 
@@ -26,40 +27,78 @@ class AboutView(View):
 
 class ShowBoardView(View):
 
+    @method_decorator(login_required)
     def get(self, request):
-        if request.user.is_authenticated:
-            board = Board.objects.filter(id=request.user.board_id)
-            context_dict = {}
+        board = request.user.userprofile.board
+        context_dict = {}
+        if board:
             context_dict['title'] = board.name
-            context_dict['board'] = board
-            return render(request, 'board/show_board.html', context=context_dict)
+            context_dict['max_wip'] = board.max_wip
+            context_dict['tasks'] = get_tasks_by_status(board)
+            context_dict['current_wip'] = len(context_dict['tasks'].in_progress)
+        else:
+            redirect(reverse('board:create_board'))
+        return render(request, 'board/show_board.html', context=context_dict)
 
 
 class AddTaskView(View):
 
+    @method_decorator(login_required)
     def get(self, request):
         form = TaskForm()
         return render(request, "board/create_task.html", context={'form': form})
 
+    @method_decorator(login_required)
     def post(self, request):
         form = TaskForm(request.POST)
-        new_task = Task.objects.create(form, commit=False)
-        new_task.date_created = timezone.now()
-        new_task.board = request.user.userprofile.board_id
-        new_task.status = 'todo'
-        new_task.save()
-        return redirect(reverse('board:show_board'))
+        if form.is_valid():
+            new_task = form.save(commit=False)
+            new_task.date_created = timezone.now()
+            new_task.board = request.user.userprofile.board_id
+            if not new_task.board:
+                redirect(reverse('add_task_fail', {'message': 'You must have a board to add tasks.'}))
+            new_task.status = 'todo'
+            new_task.save()
+            return redirect(reverse('add_task_success'))
+        else:
+            redirect('add_task_fail', {'message': 'Something went wrong when adding the task'})
 
 
-class CreateBoardView(View):
+class AddTaskSuccessView(View):
     pass
 
 
-class UserProfileView(View):
+class AddTaskFailView(View):
+    pass
+
+
+class CreateBoardView(View):
+
+    @method_decorator(login_required)
     def get(self, request):
-        profile = UserProfile.objects.get(user=request.user)
+        form = BoardForm()
+        return render(request, "board/create_board.html", context={'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request):
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            new_board = form.save(commit=False)
+            new_board.created_by = request.user
+            new_board.save()
+            request.user.userprofile.board = new_board
+            return redirect(reverse('board:index'))
+        else:
+            redirect('board:add_task_fail', {'message': 'Something went wrong when adding the board'})
+
+
+class UserProfileView(View):
+
+    @method_decorator(login_required)
+    def get(self, request):
+        profile = request.user.userprofile
         context_dict = {'profile': profile}
-        render(request, 'board/user_profile.html', context=context_dict)
+        return render(request, 'board/user_profile.html', context=context_dict)
 
 
 class EditTaskView(View):
@@ -83,5 +122,15 @@ class RegisterView(View):
             print(form.errors)
             return redirect(reverse('board:index'))
 
+
+# Helper functions
+
+def get_tasks_by_status(board: Board) -> namedtuple:
+    todo = Board.task_set.filter(status='todo').order_by('priority', '-date_created')
+    in_progress = Board.task_set.filter(status='wip')
+    done = Board.task_set.filter(status='done').order_by('-date_completed')
+    TaskData = namedtuple("TaskData", "todo in_progress done")
+    data = TaskData(todo=todo, in_progress=in_progress, done=done)
+    return data
 
 

@@ -18,4 +18,6 @@ class TaskForm(ModelForm):
 
 
 class BoardForm(ModelForm):
-    pass
+    class Meta:
+        model = Board
+        fields = ['name', 'max_wip', 'access_code']

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'board/base.html' %}
 {% load static %}
 
 {% block title_block %}
@@ -6,5 +6,10 @@ Add a Task
 {% endblock %}
 
 {% block content_block %}
-
+<h1>Add a task to your board</h1>
+<form method="POST", class="form-group">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Task</button>
+</form>
 {% endblock %}

@@ -40,7 +40,7 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'board:about' %}">About</a></li>
           {% if user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="{% url 'board:show_board' %}">Board</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'board:user_profile' user.id %}">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'board:user_profile' %}">Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'board:register' %}">Register</a></li>

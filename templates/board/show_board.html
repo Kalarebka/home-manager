@@ -1,10 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'board/base.html' %}
 {% load static %}
 
 {% block title_block %}
-Show Board
+Show Board {{ title }}
 {% endblock %}
 
 {% block content_block %}
+<h1>{{ board.name }}</h1>
+<h3>To Do:</h3>
+<ul>
+    {% for task in tasks.todo %}
+    <li>
+        <div class="card">
+        <div class="card-header">
+            {{ task.title }}
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ task.description }}</p>
+            <a href="#" class="btn btn-primary">I'll do it</a>
+            <a href="#" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+    </li>
+    {% endfor %}
+</ul>
 
+<h3>In Progress</h3>
+<h5>{{ current_wip }}/{{ max_wip }}</h5>
+<ul>
+    {% for task in tasks.wip %}
+    <li>{{ task.title }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Completed:</h3>
+<ul>
+    {% for task in tasks.done %}
+    <li>{{ task.title }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}

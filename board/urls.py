@@ -8,8 +8,10 @@ urlpatterns = [
     path('show_board/', views.ShowBoardView.as_view(), name="show_board"),
     path('add_task/', views.AddTaskView.as_view(), name="add_task"),
     path('create_board/', views.CreateBoardView.as_view(), name="create_board"),
-    path('user_profile/<int:user_id>', views.UserProfileView.as_view(), name='user_profile'),
-    path('edit_task/', views.EditTaskView.as_view(), name='edit_task'),
+    path('user_profile/', views.UserProfileView.as_view(), name='user_profile'),
+    path('edit_task/<int:task_id>/', views.EditTaskView.as_view(), name='edit_task'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('about/', views.AboutView.as_view(), name='about'),
+    path('add_task_success/', views.AddTaskSuccessView.as_view(), name='add_task_success'),
+    path('add_task_fail/', views.AddTaskFailView.as_view(), name='add_task_fail'),
 ]
