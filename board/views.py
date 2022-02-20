@@ -54,22 +54,24 @@ class AddTaskView(View):
         if form.is_valid():
             new_task = form.save(commit=False)
             new_task.date_created = timezone.now()
-            new_task.board = request.user.userprofile.board_id
-            if not new_task.board:
-                redirect(reverse('add_task_fail', {'message': 'You must have a board to add tasks.'}))
             new_task.status = 'todo'
+            new_task.board = request.user.userprofile.board
+            if not new_task.board:
+                return redirect(reverse('board:add_task_fail'))
             new_task.save()
-            return redirect(reverse('add_task_success'))
+            return redirect(reverse('board:add_task_success'))
         else:
-            redirect('add_task_fail', {'message': 'Something went wrong when adding the task'})
+            return redirect('board:add_task_fail', context={'message': 'Something went wrong when adding the task'})
 
 
 class AddTaskSuccessView(View):
-    pass
+    def get(self, request):
+        return render(request, 'board/add_task_success.html')
 
 
 class AddTaskFailView(View):
-    pass
+    def get(self, request):
+        return render(request, 'board/add_task_fail.html')
 
 
 class CreateBoardView(View):
@@ -86,7 +88,9 @@ class CreateBoardView(View):
             new_board = form.save(commit=False)
             new_board.created_by = request.user
             new_board.save()
-            request.user.userprofile.board = new_board
+            profile = request.user.userprofile
+            profile.board_id = new_board.id
+            profile.save()
             return redirect(reverse('board:index'))
         else:
             redirect('board:add_task_fail', {'message': 'Something went wrong when adding the board'})
