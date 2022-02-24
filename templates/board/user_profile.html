@@ -6,5 +6,15 @@
 {% endblock %}
 
 {% block content_block %}
-{{ profile }}
+<table class="table table-borderless user-profile">  
+    <tr>  
+        <td>Username:</td>
+        <td>{{ profile.user }}</td>  
+    </tr>
+    <tr>  
+        <td>Profile Picture: <br><a href="#">Add Picture</a></td>
+        <td><img source="{% static 'images/default-profile-picture.png' %}"></td>  
+    </tr>
+  </table>
+  
 {% endblock %}

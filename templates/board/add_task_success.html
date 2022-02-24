@@ -2,9 +2,13 @@
 {% load static %}
 
 {% block title_block %}
-Edit task
+Task Added Successfully
 {% endblock %}
 
 {% block content_block %}
+<h3>Task Added Successfully</h3>
+<p>What do you want to do now?</p>
+<a href="{% url 'show_board' %}">Go to your board</a>
+<a href="{% url 'add_task' %}">Add another task</a>
 
 {% endblock %}

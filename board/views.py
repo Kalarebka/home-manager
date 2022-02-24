@@ -130,9 +130,9 @@ class RegisterView(View):
 # Helper functions
 
 def get_tasks_by_status(board: Board) -> namedtuple:
-    todo = Board.task_set.filter(status='todo').order_by('priority', '-date_created')
-    in_progress = Board.task_set.filter(status='wip')
-    done = Board.task_set.filter(status='done').order_by('-date_completed')
+    todo = Task.objects.filter(board=board.id, status='todo').order_by('priority', '-date_created')
+    in_progress = Task.objects.filter(board=board.id, status='wip')
+    done = Task.objects.filter(board=board.id, status='done').order_by('-date_completed')
     TaskData = namedtuple("TaskData", "todo in_progress done")
     data = TaskData(todo=todo, in_progress=in_progress, done=done)
     return data
