@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm, TaskForm, BoardForm
 from django.utils import timezone
 from collections import namedtuple
+from django.contrib.auth.models import User
 
 
 class IndexView(View):
@@ -125,6 +126,14 @@ class RegisterView(View):
         else:
             print(form.errors)
             return redirect(reverse('board:index'))
+
+
+class UserListView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        users = User.objects.exclude(username=request.user.username)
+        return render(request, 'board/user_list.html', context={'users': users})
+
 
 
 # Helper functions

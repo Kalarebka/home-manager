@@ -14,4 +14,5 @@ urlpatterns = [
     path('about/', views.AboutView.as_view(), name='about'),
     path('add_task_success/', views.AddTaskSuccessView.as_view(), name='add_task_success'),
     path('add_task_fail/', views.AddTaskFailView.as_view(), name='add_task_fail'),
+    path('user_list/', views.UserListView.as_view(), name='user_list'),
 ]

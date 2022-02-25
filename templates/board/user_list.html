@@ -1,0 +1,13 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+List of Users
+{% endblock %}
+
+{% block content_block %}
+{% for other_user in users %}
+<p>{{ other_user.username }}</p>
+{% endfor %}
+
+{% endblock %}
