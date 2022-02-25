@@ -5,14 +5,6 @@
     --light-color: #E5A5FF;
 }
 
-/* CSS variables usage */
-/* :root {
-    --glowny-kolor-tla: brown;
-  }
-  .jeden {
-    background-color: var(--glowny-kolor-tla);
-  } */
-
 body {
 background-color: var(--medium-dark-color);
 color: var(--light-color)
@@ -23,9 +15,19 @@ padding-top: 70px;
 
 }
 
+h3 {
+    font-size: 1rem;
+}
+
 /* User profile */
 
 .user-profile {
     color: var(--light-color)
 }
 
+/* Task Cards */
+
+.card {
+    color: var(--dark-color);
+    font-size: smaller;
+}

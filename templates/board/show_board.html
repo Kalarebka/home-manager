@@ -6,37 +6,62 @@ Show Board {{ title }}
 {% endblock %}
 
 {% block content_block %}
-<h1>{{ board.name }}</h1>
-<h3>To Do:</h3>
-<ul>
-    {% for task in tasks.todo %}
-    <li>
-        <div class="card">
-        <div class="card-header">
-            {{ task.title }}
-        </div>
-        <div class="card-body">
-            <p class="card-text">{{ task.description }}</p>
-            <a href="#" class="btn btn-primary">I'll do it</a>
-            <a href="#" class="btn btn-primary">Edit</a>
-        </div>
+<div class="row">
+    <div class="col-12 col-md-4">
+        <h3>To Do:</h3>
+        <ul class="list-unstyled">
+            {% for task in tasks.todo %}
+            <li>
+                <div class="card to-do">
+                <div class="card-header">
+                    {{ task.title }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ task.description }}</p>
+                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
+                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                </div>
+            </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
-    </li>
-    {% endfor %}
-</ul>
+    <div class="col-12 col-md-4">
+        <h3>In Progress {{ current_wip }}/{{ max_wip }}</h3>
+        <ul class="list-unstyled">
+            {% for task in tasks.wip %}
+            <div class="card wip">
+                <div class="card-header">
+                    {{ task.title }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ task.description }}</p>
+                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
+                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-12 col-md-4">
+        <h3>Completed:</h3>
+        <ul class="list-unstyled">
+            {% for task in tasks.done %}
+            <div class="card done">
+                <div class="card-header">
+                    {{ task.title }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ task.description }}</p>
+                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
+                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+        {% endblock %}
+    </div>
+  </div>
 
-<h3>In Progress</h3>
-<h5>{{ current_wip }}/{{ max_wip }}</h5>
-<ul>
-    {% for task in tasks.wip %}
-    <li>{{ task.title }}</li>
-    {% endfor %}
-</ul>
 
-<h3>Completed:</h3>
-<ul>
-    {% for task in tasks.done %}
-    <li>{{ task.title }}</li>
-    {% endfor %}
-</ul>
-{% endblock %}
+
