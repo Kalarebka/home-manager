@@ -114,7 +114,7 @@ class EditTaskView(View):
         task = Task.objects.get(pk=task_id)
         form = TaskForm(instance=task)
         context_dict = {'form': form, 'instance': task}
-        return render(request, 'edit_task.html', context_dict)
+        return render(request, 'board/edit_task.html', context_dict)
 
     def post(self, request, task_id):
         task = Task.objects.get(pk=task_id)
