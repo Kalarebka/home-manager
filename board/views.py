@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.views import View
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from .models import Board, Task, UserProfile
-from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm, TaskForm, BoardForm
-from django.utils import timezone
 from collections import namedtuple
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from .forms import RegisterForm, TaskForm, BoardForm
+from .models import Board, Task, UserProfile
 
 
 class IndexView(View):
@@ -36,7 +37,7 @@ class ShowBoardView(View):
             context_dict['title'] = board.name
             context_dict['max_wip'] = board.max_wip
             context_dict['tasks'] = get_tasks_by_status(board)
-            context_dict['current_wip'] = len(context_dict['tasks'].in_progress)
+            context_dict['current_wip'] = len(context_dict['tasks'].wip)
         else:
             redirect(reverse('board:create_board'))
         return render(request, 'board/show_board.html', context=context_dict)
@@ -100,14 +101,52 @@ class CreateBoardView(View):
 class UserProfileView(View):
 
     @method_decorator(login_required)
-    def get(self, request):
-        profile = request.user.userprofile
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        profile = user.userprofile
         context_dict = {'profile': profile}
         return render(request, 'board/user_profile.html', context=context_dict)
 
 
 class EditTaskView(View):
-    pass
+
+    def get(self, request, task_id):
+        task = Task.objects.get(pk=task_id)
+        form = TaskForm(instance=task)
+        context_dict = {'form': form, 'instance': task}
+        return render(request, 'edit_task.html', context_dict)
+
+    def post(self, request, task_id):
+        task = Task.objects.get(pk=task_id)
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('board:show_board'))
+
+
+class MarkCompletedView(View):
+    @method_decorator(login_required)
+    def get(self, request, task_id):
+        board = request.user.userprofile.board
+        board.current_wip -= 1
+        task = Task.objects.get(pk=task_id)
+        task.status = 'done'
+        task.save()
+        board.save()
+        return redirect(reverse('board:show_board'))
+
+
+class ResignTaskView(View):
+    @method_decorator(login_required)
+    def get(self, request, task_id):
+        board = request.user.userprofile.board
+        board.current_wip -= 1
+        task = Task.objects.get(pk=task_id)
+        task.status = 'todo'
+        task.assigned_to = None
+        task.save()
+        board.save()
+        return redirect(reverse('board:show_board'))
 
 
 class RegisterView(View):
@@ -119,13 +158,16 @@ class RegisterView(View):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # If user does not have a board yet, the board_id is -1
             user_profile = UserProfile.objects.create(user=user, likes=0, board_id=None)
             user_profile.save()
+            user_to_log = authenticate(request, username=form.cleaned_data['username'],
+                                       password=form.cleaned_data['password1'],
+                                       )
+            login(request, user_to_log)
             return redirect(reverse('board:index'))
         else:
             print(form.errors)
-            return redirect(reverse('board:index'))
+            return render(request, 'board/register.html', {'form': form})
 
 
 class UserListView(View):
@@ -135,15 +177,28 @@ class UserListView(View):
         return render(request, 'board/user_list.html', context={'users': users})
 
 
+class AssignTaskView(View):
+    @method_decorator(login_required)
+    def get(self, request, task_id):
+        board = request.user.userprofile.board
+        if board.current_wip < board.max_wip:
+            task = Task.objects.get(pk=task_id)
+            task.assigned_to = request.user
+            task.status = 'wip'
+            task.save()
+            board.current_wip += 1
+            board.save()
+            return redirect(reverse('board:show_board'))
 
 # Helper functions
 
+
 def get_tasks_by_status(board: Board) -> namedtuple:
     todo = Task.objects.filter(board=board.id, status='todo').order_by('priority', '-date_created')
-    in_progress = Task.objects.filter(board=board.id, status='wip')
+    wip = Task.objects.filter(board=board.id, status='wip')
     done = Task.objects.filter(board=board.id, status='done').order_by('-date_completed')
-    TaskData = namedtuple("TaskData", "todo in_progress done")
-    data = TaskData(todo=todo, in_progress=in_progress, done=done)
+    TaskData = namedtuple("TaskData", "todo wip done")
+    data = TaskData(todo=todo, wip=wip, done=done)
     return data
 
 

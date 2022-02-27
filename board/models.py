@@ -1,11 +1,11 @@
-from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Board(models.Model):
     name = models.CharField(max_length=128)
     max_wip = models.IntegerField(default=5)
+    current_wip = models.IntegerField(default=0)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     access_code = models.CharField(max_length=128)
 
@@ -15,7 +15,7 @@ class Board(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to='profile_images', blank=True, null=True)
+    picture = models.ImageField(default='default.jpg', upload_to='profile_images', blank=True, null=True)
     likes = models.IntegerField(default=0)
     board = models.ForeignKey(Board, on_delete=models.SET_NULL, null=True)
 

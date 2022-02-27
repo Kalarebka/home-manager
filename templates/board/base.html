@@ -61,6 +61,11 @@
                 <i class="fa-regular fa-calendar"></i> <span class="ms-1 d-none d-sm-inline">Board</span>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="{% url 'board:add_task' %}" class="nav-link align-middle px-0">
+                <i class="fa-solid fa-circle-plus"></i> <span class="ms-1 d-none d-sm-inline">Add a Task</span>
+              </a>
+            </li>
 
             {% else %}
             <li class="nav-item">
@@ -93,7 +98,7 @@
 
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
               <li><a class="dropdown-item" href="{% url 'board:user_list' %}">User list</a></li>
-              <li><a class="dropdown-item" href="{% url 'board:user_profile' %}">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'board:user_profile' user.username %}">Profile</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>

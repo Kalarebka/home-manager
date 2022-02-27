@@ -7,8 +7,8 @@ Show Board {{ title }}
 
 {% block content_block %}
 <div class="row">
-    <div class="col-12 col-md-4">
-        <h3>To Do:</h3>
+    <div class="col-12 col-md-4 status-column">
+        <h3 class="text-center">To Do:</h3>
         <ul class="list-unstyled">
             {% for task in tasks.todo %}
             <li>
@@ -18,16 +18,16 @@ Show Board {{ title }}
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ task.description }}</p>
-                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
-                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{% url 'board:assign_task' task.id %}" class="btn btn-primary btn-sm">I'll do it</a>
+                    <a href="{% url 'board:edit_task' task.id %}" class="btn btn-primary btn-sm">Edit</a>
                 </div>
             </div>
             </li>
             {% endfor %}
         </ul>
     </div>
-    <div class="col-12 col-md-4">
-        <h3>In Progress {{ current_wip }}/{{ max_wip }}</h3>
+    <div class="col-12 col-md-4 status-column">
+        <h3 class="text-center">In Progress {{ current_wip }}/{{ max_wip }}</h3>
         <ul class="list-unstyled">
             {% for task in tasks.wip %}
             <div class="card wip">
@@ -36,15 +36,15 @@ Show Board {{ title }}
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ task.description }}</p>
-                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
-                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{% url 'board:mark_completed' task.id %}" class="btn btn-primary btn-sm">Completed</a>
+                    <a href="{% url 'board:resign_task' task.id %}" class="btn btn-primary btn-sm">Resign</a>
                 </div>
             </div>
             {% endfor %}
         </ul>
     </div>
-    <div class="col-12 col-md-4">
-        <h3>Completed:</h3>
+    <div class="col-12 col-md-4 status-column">
+        <h3 class="text-center">Completed:</h3>
         <ul class="list-unstyled">
             {% for task in tasks.done %}
             <div class="card done">
@@ -53,8 +53,6 @@ Show Board {{ title }}
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ task.description }}</p>
-                    <a href="#" class="btn btn-primary btn-sm">I'll do it</a>
-                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
                 </div>
             </div>
             {% endfor %}
