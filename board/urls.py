@@ -18,4 +18,5 @@ urlpatterns = [
     path('assign_task/<int:task_id>/', views.AssignTaskView.as_view(), name='assign_task'),
     path('mark_completed/<int:task_id>/', views.MarkCompletedView.as_view(), name='mark_completed'),
     path('resign_task/<int:task_id>', views.ResignTaskView.as_view(), name='resign_task'),
+    path('join_board', views.JoinBoardView.as_view(), name='join_board'),
 ]

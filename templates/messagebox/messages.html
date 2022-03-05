@@ -1,0 +1,32 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Messages
+{% endblock %}
+
+{% block content_block %}
+<h3>Inbox:</h3>
+<a href="{% url 'messagebox:inbox' %}">See all</a>
+{% if inbox %}
+<ul>
+    {% for message in inbox %}
+    <li>{{ message.title }} from {{ message.from_user }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You have no messages</p>
+{% endif %}
+
+<h3>Sent:</h3>
+<a href="{% url 'messagebox:sent' %}">See all</a>
+{% if sent %}
+<ul>
+    {% for message in sent %}
+    <li>{{ message.title }} to {{ message.to_user }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Empty</p>
+{% endif %}
+{% endblock %}

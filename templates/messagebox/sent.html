@@ -1,0 +1,20 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Sent messages
+{% endblock %}
+
+{% block content_block %}
+
+<h3>Sent:</h3>
+{% if sent %}
+<ul>
+    {% for message in sent %}
+    <li>{{ message.title }} to {{ message.to_user }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Empty</p>
+{% endif %}
+{% endblock %}

@@ -190,6 +190,25 @@ class AssignTaskView(View):
             board.save()
             return redirect(reverse('board:show_board'))
 
+
+class JoinBoardView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        boards = Board.objects.all()
+        boards_with_creators = []
+        for board in boards:
+            creator = board.created_by
+            boards_with_creators.append((board, creator))
+        return render(request, 'board/join_board.html', context={'boards': boards_with_creators})
+    def post(self, request, board):
+        board_creator = board.created_by
+        send_message(request.user.id, board_creator.id, "placeholder")
+
+
+
+
+
+
 # Helper functions
 
 
@@ -201,4 +220,6 @@ def get_tasks_by_status(board: Board) -> namedtuple:
     data = TaskData(todo=todo, wip=wip, done=done)
     return data
 
+def send_message(from_user, to_user, title='untitled', message='', ):
+    message = Message.objects.create(from_user=from_user, to_user=to_user, title=title, message=message)
 

@@ -1,0 +1,15 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Join a Board
+{% endblock %}
+
+{% block content_block %}
+<h3>Available boards:</h3>
+<ul>
+{% for board, user in boards %}
+    <li>{{ board.name }} by {{ user.username }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

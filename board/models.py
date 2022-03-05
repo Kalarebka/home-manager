@@ -3,10 +3,10 @@ from django.db import models
 
 
 class Board(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     max_wip = models.IntegerField(default=5)
     current_wip = models.IntegerField(default=0)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     access_code = models.CharField(max_length=128)
 
     def __str__(self):
@@ -39,8 +39,8 @@ class Task(models.Model):
         ('done', 'Done')
     ]
 
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=True)
-    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     priority = models.CharField(choices=priority_choices, default=MEDIUM, blank=True, max_length=1)
     title = models.CharField(max_length=256)
     description = models.TextField(max_length=1024, default='', blank=True)

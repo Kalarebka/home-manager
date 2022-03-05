@@ -1,0 +1,20 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Inbox
+{% endblock %}
+
+{% block content_block %}
+<h3>Inbox:</h3>
+{% if inbox %}
+<ul>
+    {% for message in inbox %}
+    <li>{{ message.title }} from {{ message.from_user }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>You have no messages</p>
+{% endif %}
+
+{% endblock %}
