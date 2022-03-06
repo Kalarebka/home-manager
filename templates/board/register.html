@@ -5,7 +5,9 @@
 Create an Account
 {% endblock %}
 
+
 {% block content_block %}
+{% include 'board/alert_message.html' %}
 <form method="POST", class="form-group">
     {% csrf_token %}
     {{ form.as_p }}

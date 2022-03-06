@@ -7,7 +7,7 @@
 
 body {
 background-color: var(--medium-dark-color);
-color: var(--light-color)
+color: var(--light-color);
 }
 
 .container {
@@ -22,7 +22,7 @@ h3 {
 /* User profile */
 
 .user-profile {
-    color: var(--light-color)
+    color: var(--light-color);
 }
 
 /* Task Cards */
@@ -30,4 +30,13 @@ h3 {
 .card {
     color: var(--dark-color);
     font-size: smaller;
+}
+
+
+.nav-footer {
+    font-size: 12px;
+}
+
+.contact a {
+    font-size: 18;
 }

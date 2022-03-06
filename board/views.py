@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -34,12 +35,11 @@ class ShowBoardView(View):
         board = request.user.userprofile.board
         context_dict = {}
         if board:
-            context_dict['title'] = board.name
-            context_dict['max_wip'] = board.max_wip
+            context_dict['board'] = board
             context_dict['tasks'] = get_tasks_by_status(board)
             context_dict['current_wip'] = len(context_dict['tasks'].wip)
         else:
-            redirect(reverse('board:create_board'))
+            context_dict['board'] = None
         return render(request, 'board/show_board.html', context=context_dict)
 
 
@@ -47,6 +47,9 @@ class AddTaskView(View):
 
     @method_decorator(login_required)
     def get(self, request):
+        board = request.user.userprofile.board
+        if not board:
+            return redirect(reverse('board:show_board'))
         form = TaskForm()
         return render(request, "board/create_task.html", context={'form': form})
 
@@ -166,7 +169,7 @@ class RegisterView(View):
             login(request, user_to_log)
             return redirect(reverse('board:index'))
         else:
-            print(form.errors)
+            messages.warning(request, 'Please correct the error below.')
             return render(request, 'board/register.html', {'form': form})
 
 
