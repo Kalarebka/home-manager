@@ -1,0 +1,15 @@
+{% extends 'board/base.html' %}
+{% load static %}
+
+{% block title_block %}
+Send a Message
+{% endblock %}
+
+{% block content_block %}
+<h1>Send a message</h1>
+<form method="POST", class="form-group">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

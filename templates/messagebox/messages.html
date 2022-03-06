@@ -6,6 +6,7 @@ Messages
 {% endblock %}
 
 {% block content_block %}
+<h3><a href="{% url 'messagebox:new_message' %}">New Message</a></h3>
 <h3>Inbox:</h3>
 <a href="{% url 'messagebox:inbox' %}">See all</a>
 {% if inbox %}

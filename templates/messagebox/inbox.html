@@ -10,7 +10,7 @@ Inbox
 {% if inbox %}
 <ul>
     {% for message in inbox %}
-    <li>{{ message.title }} from {{ message.from_user }}</li>
+    <li><a href="{% url 'messagebox:show_message'%} message_id={{ message.id }}">{{ message.title }}</a> from <a href="">{{ message.from_user }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
