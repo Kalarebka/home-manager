@@ -10,6 +10,8 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from messagebox.models import Message
+
 from .forms import RegisterForm, TaskForm, BoardForm
 from .models import Board, Task, UserProfile
 
@@ -101,14 +103,25 @@ class CreateBoardView(View):
             redirect('board:add_task_fail', {'message': 'Something went wrong when adding the board'})
 
 
+def get_user_profile(username):
+    user = User.objects.get(username=username)
+    profile = user.userprofile
+    return profile
+
+
+
 class UserProfileView(View):
 
     @method_decorator(login_required)
     def get(self, request, username):
-        user = User.objects.get(username=username)
-        profile = user.userprofile
-        context_dict = {'profile': profile}
+        context_dict = {'profile': get_user_profile(username)}
         return render(request, 'board/user_profile.html', context=context_dict)
+
+    @method_decorator(login_required)
+    def post(self, request, username):
+        request.user.userprofile.picture = request.FILES.get("profile_picture")
+        context_dict = {'profile': get_user_profile(username)}
+        return render(request, 'board/user_profile.html', context_dict)
 
 
 class EditTaskView(View):

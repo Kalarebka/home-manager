@@ -1,5 +1,7 @@
-- should I make the messages into a separate app?
 - users able to have more than one board - show a default one on show board or show_board displays a list of boards?
 or maybe a submenu in the navbar?
 - htmx in board columns
--
+- shopping list
+- calendar
+- when there are lots of separate apps, maybe something in user profile or on user main page to sum things up?
+- maybe users should not be tied to boards, but be connected in groups, and then the group can have a board and select from other features

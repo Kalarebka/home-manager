@@ -7,7 +7,7 @@ List of Users
 
 {% block content_block %}
 {% for other_user in users %}
-<p>{{ other_user.username }}</p>
+<p><a href="{% url 'board:user_profile' other_user.username %}">{{ other_user.username }}</a></p>
 {% endfor %}
 
 {% endblock %}

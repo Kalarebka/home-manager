@@ -25,6 +25,13 @@ h3 {
     color: var(--light-color);
 }
 
+/* User picture */
+
+.profile-picture-big {
+    width: 100px;
+    border-radius: 100%;
+}
+
 /* Task Cards */
 
 .card {
