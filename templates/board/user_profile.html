@@ -6,15 +6,15 @@
 {% endblock %}
 
 {% block content_block %}
-<table class="table table-borderless user-profile">  
-    <tr>  
+<table class="table table-borderless user-profile">
+    <tr>
         <td>Username:</td>
-        <td>{{ profile.user }}</td>  
+        <td>{{ profile.user }}</td>
     </tr>
-    <tr>  
+    <tr>
 
     </tr>
-  </table>
+</table>
 <h3>Profile Picture:</h3>
 <img src="{% static 'images/default-profile-picture.png' %}" class="profile-picture-big">
 <!--Form to add a profile picture-->
@@ -26,5 +26,5 @@
     </div>
     <button type="submit" class="btn btn-primary">Add picture</button>
 </form>
-  
+
 {% endblock %}

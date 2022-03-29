@@ -8,7 +8,7 @@ Join a Board
 {% block content_block %}
 <h3>Available boards:</h3>
 <ul>
-{% for board, user in boards %}
+    {% for board, user in boards %}
     <li>{{ board.name }} by {{ user.username }}</li>
     {% endfor %}
 </ul>

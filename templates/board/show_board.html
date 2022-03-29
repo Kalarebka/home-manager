@@ -14,15 +14,15 @@ Show Board {{ board.name }}
             {% for task in tasks.todo %}
             <li>
                 <div class="card to-do">
-                <div class="card-header">
-                    {{ task.title }}
+                    <div class="card-header">
+                        {{ task.title }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ task.description }}</p>
+                        <a href="{% url 'board:assign_task' task.id %}" class="btn btn-primary btn-sm">I'll do it</a>
+                        <a href="{% url 'board:edit_task' task.id %}" class="btn btn-primary btn-sm">Edit</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="card-text">{{ task.description }}</p>
-                    <a href="{% url 'board:assign_task' task.id %}" class="btn btn-primary btn-sm">I'll do it</a>
-                    <a href="{% url 'board:edit_task' task.id %}" class="btn btn-primary btn-sm">Edit</a>
-                </div>
-            </div>
             </li>
             {% endfor %}
         </ul>
@@ -60,10 +60,8 @@ Show Board {{ board.name }}
         </ul>
 
     </div>
-  </div>
+</div>
 {% else %}
 <p>You don't have a board yet! <a href="{% url 'board:create_board' %}">Create a new board</a> or <a href="{% url 'board:join_board'">join an existing one</a>.</p>
 {% endif %}
 {% endblock %}
-
-

@@ -9,11 +9,11 @@ Home Manager
 
 {% if user.is_authenticated %}
 <h1>Hello {{ user.username }}!</h1>
-    {% if board_id %}
+{% if board_id %}
 
-    {% else %}
+{% else %}
 <p>nie ma tablicy</p>
-    {% endif %}
+{% endif %}
 {% else %}
 <h1>Welcome to Home Manager</h1>
 <p>Register to create or join a task management board or go to demo board to see the functionality.</p>

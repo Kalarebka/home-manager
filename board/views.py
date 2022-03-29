@@ -2,12 +2,11 @@ from collections import namedtuple
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.views import View
 
 from messagebox.models import Message
@@ -18,6 +17,9 @@ from .models import Board, Task, UserProfile
 
 class IndexView(View):
     def get(self, request):
+        # TODO
+        """ If user is not logged in, display basic info about the page and sample pictures.
+        If user is logged in, display welcome message and overview of user's activity and tasks. """
         context_dict = {}
         if request.user.is_authenticated:
             user_profile = UserProfile.objects.get(user=request.user)
@@ -27,13 +29,13 @@ class IndexView(View):
 
 class AboutView(View):
     def get(self, request):
+        """ Display description of the page. """
         return render(request, "board/about.html")
 
 
-class ShowBoardView(View):
-
-    @method_decorator(login_required)
+class ShowBoardView(LoginRequiredMixin, View):
     def get(self, request):
+        """ Display user's board. If no board, display links to create or join one. """
         board = request.user.userprofile.board
         context_dict = {}
         if board:
@@ -45,9 +47,8 @@ class ShowBoardView(View):
         return render(request, 'board/show_board.html', context=context_dict)
 
 
-class AddTaskView(View):
-
-    @method_decorator(login_required)
+class AddTaskView(LoginRequiredMixin, View):
+    """ Add task to user board"""
     def get(self, request):
         board = request.user.userprofile.board
         if not board:
@@ -55,7 +56,6 @@ class AddTaskView(View):
         form = TaskForm()
         return render(request, "board/create_task.html", context={'form': form})
 
-    @method_decorator(login_required)
     def post(self, request):
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -81,14 +81,12 @@ class AddTaskFailView(View):
         return render(request, 'board/add_task_fail.html')
 
 
-class CreateBoardView(View):
-
-    @method_decorator(login_required)
+class CreateBoardView(LoginRequiredMixin, View):
+    """ Create a board for currently logged in user"""
     def get(self, request):
         form = BoardForm()
         return render(request, "board/create_board.html", context={'form': form})
 
-    @method_decorator(login_required)
     def post(self, request):
         form = BoardForm(request.POST)
         if form.is_valid():
@@ -103,29 +101,22 @@ class CreateBoardView(View):
             redirect('board:add_task_fail', {'message': 'Something went wrong when adding the board'})
 
 
-def get_user_profile(username):
-    user = User.objects.get(username=username)
-    profile = user.userprofile
-    return profile
-
-
-
-class UserProfileView(View):
-
-    @method_decorator(login_required)
+class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, username):
+        """ Display user profile. """
         context_dict = {'profile': get_user_profile(username)}
         return render(request, 'board/user_profile.html', context=context_dict)
 
-    @method_decorator(login_required)
     def post(self, request, username):
+        # TODO
+        """ Update profile picture. Show only on currently logged in user's profile. """
         request.user.userprofile.picture = request.FILES.get("profile_picture")
         context_dict = {'profile': get_user_profile(username)}
         return render(request, 'board/user_profile.html', context_dict)
 
 
-class EditTaskView(View):
-
+class EditTaskView(LoginRequiredMixin, View):
+    """ Edit existing task. """
     def get(self, request, task_id):
         task = Task.objects.get(pk=task_id)
         form = TaskForm(instance=task)
@@ -140,8 +131,7 @@ class EditTaskView(View):
             return redirect(reverse('board:show_board'))
 
 
-class MarkCompletedView(View):
-    @method_decorator(login_required)
+class MarkCompletedView(LoginRequiredMixin, View):
     def get(self, request, task_id):
         board = request.user.userprofile.board
         board.current_wip -= 1
@@ -152,8 +142,7 @@ class MarkCompletedView(View):
         return redirect(reverse('board:show_board'))
 
 
-class ResignTaskView(View):
-    @method_decorator(login_required)
+class ResignTaskView(LoginRequiredMixin, View):
     def get(self, request, task_id):
         board = request.user.userprofile.board
         board.current_wip -= 1
@@ -186,15 +175,13 @@ class RegisterView(View):
             return render(request, 'board/register.html', {'form': form})
 
 
-class UserListView(View):
-    @method_decorator(login_required)
+class UserListView(LoginRequiredMixin, View):
     def get(self, request):
         users = User.objects.exclude(username=request.user.username)
         return render(request, 'board/user_list.html', context={'users': users})
 
 
-class AssignTaskView(View):
-    @method_decorator(login_required)
+class AssignTaskView(LoginRequiredMixin, View):
     def get(self, request, task_id):
         board = request.user.userprofile.board
         if board.current_wip < board.max_wip:
@@ -207,8 +194,7 @@ class AssignTaskView(View):
             return redirect(reverse('board:show_board'))
 
 
-class JoinBoardView(View):
-    @method_decorator(login_required)
+class JoinBoardView(LoginRequiredMixin, View):
     def get(self, request):
         boards = Board.objects.all()
         boards_with_creators = []
@@ -220,12 +206,13 @@ class JoinBoardView(View):
         board_creator = board.created_by
         send_message(request.user.id, board_creator.id, "placeholder")
 
-
-
-
-
-
 # Helper functions
+
+
+def get_user_profile(username):
+    user = User.objects.get(username=username)
+    profile = user.userprofile
+    return profile
 
 
 def get_tasks_by_status(board: Board) -> namedtuple:
@@ -236,6 +223,7 @@ def get_tasks_by_status(board: Board) -> namedtuple:
     data = TaskData(todo=todo, wip=wip, done=done)
     return data
 
+# TODO (for sending automated messages)
 def send_message(from_user, to_user, title='untitled', message='', ):
     message = Message.objects.create(from_user=from_user, to_user=to_user, title=title, message=message)
 

@@ -1,49 +1,46 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.core.exceptions import PermissionDenied
 
 from .models import Message
 from .forms import MessageForm
 
 
-class MessagesView(View):
+class MessagesView(LoginRequiredMixin, View):
     def get(self, request):
+        """ Show five latest of received and sent messages."""
         inbox = request.user.received_messages.order_by('-date')[:5]
         sent = request.user.sent_messages.order_by('-date')[:5]
         return render(request, 'messagebox/messages.html', context={'inbox': inbox, 'sent': sent})
 
 
-class InboxView(View):
+class InboxView(LoginRequiredMixin, View):
     def get(self, request):
+        """ Show received messages (newest first). """
         inbox = request.user.received_messages.order_by('-date')
         return render(request, 'messagebox/inbox.html', context={'inbox': inbox})
 
 
-class SentView(View):
+class SentView(LoginRequiredMixin, View):
     def get(self, request):
+        """ Show sent messages (newest first). """
         sent = request.user.sent_messages.order_by('-date')
         return render(request, 'messagebox/sent.html', context={'sent': sent})
 
 
-class DeleteMessageView(View):
+class DeleteMessageView(LoginRequiredMixin, View):
+    """ Delete message with specified id and redirect to previous page. """
     pass
 
 
-class NewMessageView(View):
-
-    @method_decorator(login_required)
+class NewMessageView(LoginRequiredMixin, View):
+    """ Create and send a message to another user. """
     def get(self, request):
         form = MessageForm()
         return render(request, 'messagebox/new_message.html', context={'form': form})
 
-    @method_decorator(login_required)
     def post(self, request):
         form = MessageForm(request.POST)
         if form.is_valid():
@@ -53,9 +50,9 @@ class NewMessageView(View):
             return redirect(reverse('messagebox:messages'))
 
 
-class ShowMessageView(View):
-    @method_decorator(login_required)
+class ShowMessageView(LoginRequiredMixin, View):
     def get(self, request, message_id):
+        """ Show message details. """
         message = Message.objects.get(pk=message_id)
         if message.to_user == request.user or message.from_user == request.user:
             return render(request, 'messagebox/show_message.html', context={'message': message})

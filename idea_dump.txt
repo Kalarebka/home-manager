@@ -1,7 +1,37 @@
+For a working version:
+- finish index page (not logged in - description of the page and picture with a sample board;
+                     logged in: show welcome message and user's assigned tasks)
+- fix max wip in board display
+- htmx for board display (deleting, editing and changing status of a task)
+- show assigned user in task card
+- write a readme
+- security? make sure nothing bad will happen if it goes online
+- make user profile pictures work
+- joining existing board mechanism
+- ability to delete messages
+- change database to postgres
+- user list - show existing boards and button to join if current user doesn't have one
+- messages - reply button
+
+
+Then:
+- deployment - make it work in the internet
+- write tests for basic functionality
+
+
+Improvements:
+- Django Crispy Forms
+- Django Widget Tweaks
+- make tasks colored according to priority:
+    <div class="one-class{% if condition %} another-class{% endif %}"></div>
+    or make css classes named after status and priority options
+- add tiny assigned user picture in task cards
+- use django.contrib.messages to show stuff
+- make user profile prettier
+- make the whole front-end prettier
 - users able to have more than one board - show a default one on show board or show_board displays a list of boards?
 or maybe a submenu in the navbar?
-- htmx in board columns
 - shopping list
 - calendar
-- when there are lots of separate apps, maybe something in user profile or on user main page to sum things up?
-- maybe users should not be tied to boards, but be connected in groups, and then the group can have a board and select from other features
+- when there are lots of separate apps, maybe something in user profile or on user main page to sum things up? - I think in future versions it's what will happen on the index page after logging in
+- maybe users should not be tied to boards, but be connected in groups, and then the group can have a board and select from other features?

@@ -7,7 +7,7 @@ Send a Message
 
 {% block content_block %}
 <h1>Send a message</h1>
-<form method="POST", class="form-group">
+<form method="POST" , class="form-group">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Send</button>
