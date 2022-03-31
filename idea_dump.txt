@@ -20,6 +20,8 @@ Then:
 
 
 Improvements:
+- https://djangopackages.org/grids/g/calendar/
+- Use more generic view classes
 - Django Crispy Forms
 - Django Widget Tweaks
 - make tasks colored according to priority:
