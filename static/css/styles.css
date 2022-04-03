@@ -29,6 +29,12 @@ h3 {
 
 .profile-picture-big {
     width: 100px;
+    border-radius: 10%;
+}
+
+.profile-picture-small {
+    width: 30px;
+    height: 30px;
     border-radius: 100%;
 }
 

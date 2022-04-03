@@ -28,12 +28,12 @@ Show Board {{ board.name }}
         </ul>
     </div>
     <div class="col-12 col-md-4 status-column">
-        <h3 class="text-center">In Progress {{ current_wip }}/{{ max_wip }}</h3>
+        <h3 class="text-center">In Progress {{ current_wip }}/{{ board.max_wip }}</h3>
         <ul class="list-unstyled">
             {% for task in tasks.wip %}
             <div class="card wip">
-                <div class="card-header">
-                    {{ task.title }}
+                <div class="card-header d-flex justify-content-between">
+                    <span>{{ task.title }}</span><span>{{task.assigned_to }} <img src="{% get_media_prefix %}/{{ user.userprofile.picture }}" class="profile-picture-small"></span>
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ task.description }}</p>
@@ -49,8 +49,8 @@ Show Board {{ board.name }}
         <ul class="list-unstyled">
             {% for task in tasks.done %}
             <div class="card done">
-                <div class="card-header">
-                    {{ task.title }}
+                <div class="card-header d-flex justify-content-between">
+                    <span>{{ task.title }}</span><span>{{task.assigned_to }} <img src="{% get_media_prefix %}/{{ user.userprofile.picture }}" class="profile-picture-small"></span>
                 </div>
                 <div class="card-body">
                     <p class="card-text">{{ task.description }}</p>
