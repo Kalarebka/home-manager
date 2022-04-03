@@ -16,15 +16,21 @@
     </tr>
 </table>
 <h3>Profile Picture:</h3>
+{% if profile.picture %}
+<img src="{% get_media_prefix %}/{{ profile.picture }}" class="profile-picture-big">
+{% else %}
 <img src="{% static 'images/default-profile-picture.png' %}" class="profile-picture-big">
+{% endif %}
 <!--Form to add a profile picture-->
-<form action="" method="POST" enctype="multipart/form-data">
+{% if profile.user == request.user %}
+<form action="{% url 'board:user_profile' profile.user.username %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-3">
         <label class="form-label" for="profile_picture">Upload a picture</label>
-        <input type="file" class="form-control" id="profile_picture">
+        <input type="file" class="form-control" id="profile_picture" name="profile_picture">
     </div>
     <button type="submit" class="btn btn-primary">Add picture</button>
 </form>
+{% endif %}
 
 {% endblock %}

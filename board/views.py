@@ -110,8 +110,12 @@ class UserProfileView(LoginRequiredMixin, View):
     def post(self, request, username):
         # TODO
         """ Update profile picture. Show only on currently logged in user's profile. """
-        request.user.userprofile.picture = request.FILES.get("profile_picture")
-        context_dict = {'profile': get_user_profile(username)}
+        profile = get_user_profile(username)
+        profile.picture = request.FILES.get("profile_picture")
+        # Rename the profile picture to user's name
+        # profile.picture.name = profile.picture.name.split(".")
+        profile.save()
+        context_dict = {'profile': profile}
         return render(request, 'board/user_profile.html', context_dict)
 
 
@@ -165,6 +169,7 @@ class RegisterView(View):
             user = form.save()
             user_profile = UserProfile.objects.create(user=user, likes=0, board_id=None)
             user_profile.save()
+            # Automatically login the newly registered user
             user_to_log = authenticate(request, username=form.cleaned_data['username'],
                                        password=form.cleaned_data['password1'],
                                        )
