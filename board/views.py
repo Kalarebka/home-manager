@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views import View
+from django.views.decorators.http import require_http_methods
 
 from messagebox.models import Message
 
@@ -102,15 +103,15 @@ class CreateBoardView(LoginRequiredMixin, View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
-    def get(self, request, username):
+    def get(self, request, pk):
         """ Display user profile. """
-        context_dict = {'profile': get_user_profile(username)}
+        context_dict = {'profile': get_user_profile(pk)}
         return render(request, 'board/user_profile.html', context=context_dict)
 
-    def post(self, request, username):
+    def post(self, request, pk):
         # TODO
         """ Update profile picture. Show only on currently logged in user's profile. """
-        profile = get_user_profile(username)
+        profile = get_user_profile(pk)
         profile.picture = request.FILES.get("profile_picture")
         # Rename the profile picture to user's name
         # profile.picture.name = profile.picture.name.split(".")
@@ -213,9 +214,17 @@ class JoinBoardView(LoginRequiredMixin, View):
 
 # Helper functions
 
+def prepare_tasks_data(user):
+    """ Prepare context dictionary for rendering tasks on the board."""
+    profile = get_user_profile(user.pk)
+    data = {}
+    data['board'] = profile.board
+    data['tasks'] = get_tasks_by_status(data['board'])
+    data['current_wip'] = len(data['tasks'].wip)
+    return data
 
-def get_user_profile(username):
-    user = User.objects.get(username=username)
+def get_user_profile(pk):
+    user = User.objects.get(pk=pk)
     profile = user.userprofile
     return profile
 
@@ -232,3 +241,36 @@ def get_tasks_by_status(board: Board) -> namedtuple:
 def send_message(from_user, to_user, title='untitled', message='', ):
     message = Message.objects.create(from_user=from_user, to_user=to_user, title=title, message=message)
 
+# Function views for HTMX
+
+
+@require_http_methods(['DELETE'])
+def delete_task(request, pk):
+    Task.objects.filter(pk=pk).delete()
+    context_dict = prepare_tasks_data(request.user)
+    return render(request, 'partials/tasks.html', context=context_dict)
+
+@require_http_methods(['DELETE'])
+def edit_task():
+    return None
+
+
+def assign_task(request, pk):
+    task = Task.objects.filter(pk=pk).first()
+    task.assigned_to = request.user
+    task.status = 'wip'
+    task.save()
+    context_dict = prepare_tasks_data(request.user)
+    return render(request, 'partials/tasks.html', context=context_dict)
+
+
+def resign_task():
+    return None
+
+
+def complete_task(request, pk):
+    task = Task.objects.filter(pk=pk).first()
+    task.status = 'done'
+    task.save()
+    context_dict = prepare_tasks_data(request.user)
+    return render(request, 'partials/tasks.html', context=context_dict)

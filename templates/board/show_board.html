@@ -7,60 +7,7 @@ Show Board {{ board.name }}
 
 {% block content_block %}
 {% if board %}
-<div class="row">
-    <div class="col-12 col-md-4 status-column">
-        <h3 class="text-center">To Do:</h3>
-        <ul class="list-unstyled">
-            {% for task in tasks.todo %}
-            <li>
-                <div class="card to-do">
-                    <div class="card-header">
-                        {{ task.title }}
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">{{ task.description }}</p>
-                        <a href="{% url 'board:assign_task' task.id %}" class="btn btn-primary btn-sm">I'll do it</a>
-                        <a href="{% url 'board:edit_task' task.id %}" class="btn btn-primary btn-sm">Edit</a>
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="col-12 col-md-4 status-column">
-        <h3 class="text-center">In Progress {{ current_wip }}/{{ board.max_wip }}</h3>
-        <ul class="list-unstyled">
-            {% for task in tasks.wip %}
-            <div class="card wip">
-                <div class="card-header d-flex justify-content-between">
-                    <span>{{ task.title }}</span><span>{{task.assigned_to }} <img src="{% get_media_prefix %}/{{ user.userprofile.picture }}" class="profile-picture-small"></span>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">{{ task.description }}</p>
-                    <a href="{% url 'board:mark_completed' task.id %}" class="btn btn-primary btn-sm">Completed</a>
-                    <a href="{% url 'board:resign_task' task.id %}" class="btn btn-primary btn-sm">Resign</a>
-                </div>
-            </div>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="col-12 col-md-4 status-column">
-        <h3 class="text-center">Completed:</h3>
-        <ul class="list-unstyled">
-            {% for task in tasks.done %}
-            <div class="card done">
-                <div class="card-header d-flex justify-content-between">
-                    <span>{{ task.title }}</span><span>{{task.assigned_to }} <img src="{% get_media_prefix %}/{{ user.userprofile.picture }}" class="profile-picture-small"></span>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">{{ task.description }}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </ul>
-
-    </div>
-</div>
+{% include "partials/tasks.html" %}
 {% else %}
 <p>You don't have a board yet! <a href="{% url 'board:create_board' %}">Create a new board</a> or <a href="{% url 'board:join_board'">join an existing one</a>.</p>
 {% endif %}

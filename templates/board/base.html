@@ -40,7 +40,7 @@
   <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
 
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<body>
 
   <!-- Bootstrap sidebar -->
   <div class="container-fluid">
@@ -108,7 +108,7 @@
 
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
               <li><a class="dropdown-item" href="{% url 'board:user_list' %}">User list</a></li>
-              <li><a class="dropdown-item" href="{% url 'board:user_profile' user.username %}">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'board:user_profile' user.pk %}">Profile</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -139,6 +139,11 @@
   </script>
   <!-- HTMX -->
   <script src="https://unpkg.com/htmx.org@1.1.0"></script>
+  <script>
+      document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      })
+    </script>
 </body>
 
 </html>

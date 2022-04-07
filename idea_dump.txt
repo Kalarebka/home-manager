@@ -1,12 +1,16 @@
+Done:
+- fix max wip in board display
+- show assigned user in task card
+- make user profile pictures work
+- make tasks colored according to priority
+- add tiny assigned user picture in task cards
+
 For a working version:
 - finish index page (not logged in - description of the page and picture with a sample board;
                      logged in: show welcome message and user's assigned tasks)
-- fix max wip in board display
 - htmx for board display (deleting, editing and changing status of a task)
-- show assigned user in task card
 - write a readme
 - security? make sure nothing bad will happen if it goes online
-- make user profile pictures work
 - joining existing board mechanism
 - ability to delete messages
 - change database to postgres
@@ -24,10 +28,6 @@ Improvements:
 - Use more generic view classes
 - Django Crispy Forms
 - Django Widget Tweaks
-- make tasks colored according to priority:
-    <div class="one-class{% if condition %} another-class{% endif %}"></div>
-    or make css classes named after status and priority options
-- add tiny assigned user picture in task cards
 - use django.contrib.messages to show stuff
 - make user profile prettier
 - make the whole front-end prettier

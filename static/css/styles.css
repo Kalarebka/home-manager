@@ -52,3 +52,15 @@ h3 {
 .contact a {
     font-size: 18;
 }
+
+.low-priority {
+    background-color: #ccff66;
+}
+
+.medium-priority {
+    background-color: #ffff80;
+}
+
+.high-priority {
+    background-color: #ff704d;
+}
