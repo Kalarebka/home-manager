@@ -8,7 +8,7 @@
 
 ## About the project
 
-[![Home Manager Screen Shot][product-screenshot]](home-manager.png)
+![screenshot](home-manager.png?raw=true "Screen shot")
 
 Home Manager is a kanban-board based app for managing tasks between a group of people. The main functionality is said board, with three fields that represent tasks to do, tasks currently in progress and finished tasks. Users can create tasks in their board and commit to do a task which is then assigned to them and moved to "In progress" field. After completing the task it's moved to the third column.
 
