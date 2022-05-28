@@ -1,16 +1,7 @@
-{% extends 'board/base.html' %}
-{% load static %}
-
-{% block title_block %}
-Edit task
-{% endblock %}
-
-{% block content_block %}
-<form role="form" method="post">
+<form hx-post="{{ request.path }}" role="form" method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <div class="form-group">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>
-{% endblock %}

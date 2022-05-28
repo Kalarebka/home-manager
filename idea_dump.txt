@@ -4,18 +4,19 @@ Done:
 - make user profile pictures work
 - make tasks colored according to priority
 - add tiny assigned user picture in task cards
+- write a readme
 
 For a working version:
 - finish index page (not logged in - description of the page and picture with a sample board;
                      logged in: show welcome message and user's assigned tasks)
 - htmx for board display (deleting, editing and changing status of a task)
-- write a readme
 - security? make sure nothing bad will happen if it goes online
 - joining existing board mechanism
 - ability to delete messages
 - change database to postgres
 - user list - show existing boards and button to join if current user doesn't have one
 - messages - reply button
+- registration - e-mail confirmation and recaptcha
 
 
 Then:

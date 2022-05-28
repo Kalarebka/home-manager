@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -120,22 +121,6 @@ class UserProfileView(LoginRequiredMixin, View):
         return render(request, 'board/user_profile.html', context_dict)
 
 
-class EditTaskView(LoginRequiredMixin, View):
-    """ Edit existing task. """
-    def get(self, request, task_id):
-        task = Task.objects.get(pk=task_id)
-        form = TaskForm(instance=task)
-        context_dict = {'form': form, 'instance': task}
-        return render(request, 'board/edit_task.html', context_dict)
-
-    def post(self, request, task_id):
-        task = Task.objects.get(pk=task_id)
-        form = TaskForm(request.POST, instance=task)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('board:show_board'))
-
-
 class MarkCompletedView(LoginRequiredMixin, View):
     def get(self, request, task_id):
         board = request.user.userprofile.board
@@ -241,6 +226,8 @@ def get_tasks_by_status(board: Board) -> namedtuple:
 def send_message(from_user, to_user, title='untitled', message='', ):
     message = Message.objects.create(from_user=from_user, to_user=to_user, title=title, message=message)
 
+
+
 # Function views for HTMX
 
 
@@ -250,9 +237,19 @@ def delete_task(request, pk):
     context_dict = prepare_tasks_data(request.user)
     return render(request, 'partials/tasks.html', context=context_dict)
 
-@require_http_methods(['DELETE'])
-def edit_task():
-    return None
+@require_http_methods(['GET', 'POST'])
+def edit_task(request, pk):
+    if request.method == "GET":
+        task = Task.objects.get(pk=pk)
+        form = TaskForm(instance=task)
+        context_dict = {'form': form, 'instance': task}
+        return render(request, 'board/edit_task.html', context_dict)
+    else:
+        task = Task.objects.get(pk=pk)
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return HttpResponse(status=204)
 
 
 def assign_task(request, pk):

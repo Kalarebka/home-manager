@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <p class="card-text">{{ task.description }}</p>
                         <a hx-patch="{% url 'board:assign_task' task.id %}" class="btn btn-primary btn-sm">I'll do it</a>
-                        <a href="{% url 'board:edit_task' task.id %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a hx-get="{% url 'board:edit_task' task.id %}" hx-target="#dialog" class="btn btn-primary btn-sm">Edit</a>
                         <a hx-delete="{% url 'board:delete_task' task.id %}"
                            hx-confirm="Are you sure you want to delete this task?"
                            class="btn btn-primary btn-sm">Delete</a>

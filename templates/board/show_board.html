@@ -8,6 +8,7 @@ Show Board {{ board.name }}
 {% block content_block %}
 {% if board %}
 {% include "partials/tasks.html" %}
+
 {% else %}
 <p>You don't have a board yet! <a href="{% url 'board:create_board' %}">Create a new board</a> or <a href="{% url 'board:join_board'">join an existing one</a>.</p>
 {% endif %}
