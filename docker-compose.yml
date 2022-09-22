@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  home-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi
+    volumes:
+      - ./app:/app
+    ports:
+      - 8008:8008
+    environment:
+      - DATABASE_URL=postgresql://postgres:password12345@db:5432/postgres
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    volumes:
+      - home_manager_postgres:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_SERVER=db
+      - POSTGRES_PASSWORD=password12345
+      - POSTGRES_DB=postgres
+
+volumes:
+  home_manager_postgres:
