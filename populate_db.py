@@ -1,6 +1,6 @@
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'home_manager.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_manager.settings")
 
 import django
 
@@ -12,25 +12,17 @@ from django.contrib.auth.models import User
 
 def populate():
     users = [
-        {'username': 'ika', 'password': 'ikuwikuw'},
-        {'username': 'alu', 'password': 'aluwaluw'},
-        {'username': 'eryk', 'password': 'erykuwerykuw'},
+        {"username": "ika", "password": "ikuwikuw"},
+        {"username": "alu", "password": "aluwaluw"},
+        {"username": "eryk", "password": "erykuwerykuw"},
     ]
 
-    boards = [{''}
+    boards = [{""}]
 
-    ]
-
-    tasks = [
-
-    ]
-
+    tasks = []
 
     for user in users:
-        user_profile = add_user(user['username'], user['password'])
-
-
-
+        user_profile = add_user(user["username"], user["password"])
 
 
 def add_user(username, password):
@@ -51,6 +43,6 @@ def add_task():
 
 
 # Start execution here!
-if __name__ == '__main__':
-    print('Starting population script...')
+if __name__ == "__main__":
+    print("Starting population script...")
     populate()

@@ -7,4 +7,4 @@ from django.forms import ModelForm
 class MessageForm(ModelForm):
     class Meta:
         model = Message
-        fields = ['to_user', 'title', 'text']
+        fields = ["to_user", "title", "text"]

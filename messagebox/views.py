@@ -10,36 +10,40 @@ from .forms import MessageForm
 
 class MessagesView(LoginRequiredMixin, View):
     def get(self, request):
-        """ Show five latest of received and sent messages."""
-        inbox = request.user.received_messages.order_by('-date')[:5]
-        sent = request.user.sent_messages.order_by('-date')[:5]
-        return render(request, 'messagebox/messages.html', context={'inbox': inbox, 'sent': sent})
+        """Show five latest of received and sent messages."""
+        inbox = request.user.received_messages.order_by("-date")[:5]
+        sent = request.user.sent_messages.order_by("-date")[:5]
+        return render(
+            request, "messagebox/messages.html", context={"inbox": inbox, "sent": sent}
+        )
 
 
 class InboxView(LoginRequiredMixin, View):
     def get(self, request):
-        """ Show received messages (newest first). """
-        inbox = request.user.received_messages.order_by('-date')
-        return render(request, 'messagebox/inbox.html', context={'inbox': inbox})
+        """Show received messages (newest first)."""
+        inbox = request.user.received_messages.order_by("-date")
+        return render(request, "messagebox/inbox.html", context={"inbox": inbox})
 
 
 class SentView(LoginRequiredMixin, View):
     def get(self, request):
-        """ Show sent messages (newest first). """
-        sent = request.user.sent_messages.order_by('-date')
-        return render(request, 'messagebox/sent.html', context={'sent': sent})
+        """Show sent messages (newest first)."""
+        sent = request.user.sent_messages.order_by("-date")
+        return render(request, "messagebox/sent.html", context={"sent": sent})
 
 
 class DeleteMessageView(LoginRequiredMixin, View):
-    """ Delete message with specified id and redirect to previous page. """
+    """Delete message with specified id and redirect to previous page."""
+
     pass
 
 
 class NewMessageView(LoginRequiredMixin, View):
-    """ Create and send a message to another user. """
+    """Create and send a message to another user."""
+
     def get(self, request):
         form = MessageForm()
-        return render(request, 'messagebox/new_message.html', context={'form': form})
+        return render(request, "messagebox/new_message.html", context={"form": form})
 
     def post(self, request):
         form = MessageForm(request.POST)
@@ -47,17 +51,16 @@ class NewMessageView(LoginRequiredMixin, View):
             new_message = form.save(commit=False)
             new_message.from_user = request.user
             new_message.save()
-            return redirect(reverse('messagebox:messages'))
+            return redirect(reverse("messagebox:messages"))
 
 
 class ShowMessageView(LoginRequiredMixin, View):
     def get(self, request, message_id):
-        """ Show message details. """
+        """Show message details."""
         message = Message.objects.get(pk=message_id)
         if message.to_user == request.user or message.from_user == request.user:
-            return render(request, 'messagebox/show_message.html', context={'message': message})
+            return render(
+                request, "messagebox/show_message.html", context={"message": message}
+            )
         else:
             raise PermissionDenied
-
-
-

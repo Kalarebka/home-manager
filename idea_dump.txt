@@ -1,23 +1,22 @@
 TODO:
-- dockerize it and move to postgres
-- refactoring of the code (type annotations)
-- unit tests 
+- refactoring & cleanup
+- create a makefile for docker compose commands
+- unit tests
 
 For a working version:
 - finish index page (not logged in - description of the page and picture with a sample board;
                      logged in: show welcome message and user's assigned tasks)
 - htmx for board display (deleting, editing and changing status of a task)
-- security? make sure nothing bad will happen if it goes online
+- security - make sure nothing bad will happen if it goes online
 - joining existing board mechanism
 - ability to delete messages
-- change database to postgres
 - user list - show existing boards and button to join if current user doesn't have one
 - messages - reply button
 - registration - e-mail confirmation and recaptcha
 
 
 Then:
-- deployment - make it work in the internet
+- deployment
 
 
 Improvements:
