@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  home-manager:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: home-manager
+    volumes:
+      - .:/home-manager
+    ports:
+      - 8000:8000
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password12345
+      - DATABASE_URL=postgresql://postgres:password12345@db:5432/postgres
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    volumes:
+      - home_manager_postgres:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_SERVER=db
+      - POSTGRES_PASSWORD=password12345
+      - POSTGRES_DB=postgres
+
+volumes:
+  home_manager_postgres:
