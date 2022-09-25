@@ -20,18 +20,23 @@ The project contains a messagebox app to let users communicate.
 ## Built with
 * Back-end: Django
 * Front-end: HTML, CSS, Bootstrap and HTMX
+* Docker & Docker Compose
+* Database: Postgresql
 
 <p align="right">(<a href="#top">back to top</a>)</p>
     
 ## Setup
-To run this project locally:
+To run this project locally with Docker Compose:
 
 ```
-$ pip3 install -r requirements
-$ python3 manage.py makemigrations
+$ git clone https://github.com/Kalarebka/home-manager.git
+$ cd home-manager
+$ docker-compose build
+$ docker-compose up -d
+$ docker exec -it home-manager bash
 $ python3 manage.py migrate
-$ python3 manage.py runserver
 ```
+Visit localhost:8000 in the browser.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

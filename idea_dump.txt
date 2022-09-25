@@ -34,3 +34,17 @@ or maybe a submenu in the navbar?
 - calendar
 - when there are lots of separate apps, maybe something in user profile or on user main page to sum things up? - I think in future versions it's what will happen on the index page after logging in
 - maybe users should not be tied to boards, but be connected in groups, and then the group can have a board and select from other features?
+
+
+with makefile:
+```
+$ sudo apt install make
+$ git clone https://github.com/Kalarebka/home-manager.git
+$ cd home-manager
+$ make build
+$ make start
+$ docker exec -it home-manager bash
+$ python3 manage.py migrate
+$ python3 manage.py create superuser
+$ python3 populate_db.py
+```

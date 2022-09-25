@@ -1,7 +1,14 @@
+# Project's own files
+idea_dump.txt
+README.MD
+home-manager.png
+*/migrations
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
